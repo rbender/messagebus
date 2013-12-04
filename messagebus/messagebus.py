@@ -23,19 +23,20 @@ class MessageBus:
 
     def send_message(self, message):
         message.id = self.__generate_id()
-        self.__send_message_to_subscribers(message)
+        self.__notify_subscribers(message)
 
-    def __send_message_to_subscribers(self, message):
+    def __notify_subscribers(self, message):
         self.logger.debug("Send message: {}".format(message))
         for subscription in self.subscriptions:
             if subscription.match(message):
-                self.__send_message_to_subscriber(subscription, message)
+                self.__notify_subscriber(subscription, message)
 
-    def __send_message_to_subscriber(self, subscription, message):
+    def __notify_subscriber(self, subscription, message):
         """
         Passes a message to a subscriber in a separate thread
         """
 
+        self.logger.debug("Send message to {}".format(subscription))
         thread = self._thread_constructor(target=lambda: subscription.handle(message))
         thread.start()
 

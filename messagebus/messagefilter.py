@@ -17,6 +17,14 @@ class PatternMessageFilter(MessageFilter):
     def match(self, message):
         return self._type_regex.match(message.type) and self._source_regex.match(message.source)
 
+class AllMessageFilter(MessageFilter):
+    """
+    MessageFilter that lets all messages through
+    """
+
+    def match(self, message):
+        return True
+
 def expand_regex(pattern):
 
     regex = pattern
@@ -26,11 +34,3 @@ def expand_regex(pattern):
     logging.debug("Expand {pattern} to {regex}".format(pattern=pattern, regex=regex))
 
     return re.compile(regex)
-
-if __name__ == '__main__':
-
-    filter = PatternMessageFilter("foo.*.bar.*", "*")
-
-
-
-    #print filter.match()

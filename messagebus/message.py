@@ -1,3 +1,4 @@
+import json
 
 from util import ToStringBuilder
 from util import date_time_utils
@@ -8,7 +9,7 @@ class Message:
     """
 
     def __init__(self, **kwargs):
-        self.category = None
+        self.category = kwargs.get("category")
         self.id = kwargs.get("id", 0)
         self.type = kwargs.get("type")
         self.source = kwargs.get("source")
@@ -26,4 +27,7 @@ class Message:
         builder.append("target", self.target)
         builder.append("data", self.data)
         return builder.to_string()
+
+    def to_json(self):
+        return json.dumps(self.__dict__)
 

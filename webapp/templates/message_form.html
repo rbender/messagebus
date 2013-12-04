@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post New Message</title>
+</head>
+<body>
+
+<h1>New Message</h1>
+
+<form method="POST" action="post_message" id="message_form">
+
+<p>Source:
+<label><input type="radio" name="category" value="event" checked="checked"/> Event</label>
+<label><input type="radio" name="category" value="command"/> Command</label>
+</p>
+
+<p>Source: <input type="text" name="source" size="50"/></p>
+
+<p>Type: <input type="text" name="type" size="50"/></p>
+
+<p>Target: <input type="text" name="target" size="50"/></p>
+
+<p>Data (JSON):<br/>
+<textarea name="data" rows="10" cols="50">{}</textarea></p>
+
+<input type="submit" value="Create Event"/>
+
+</form>
+
+</body>
+</html>

@@ -15,3 +15,20 @@ Things (sensors, services, etc) should publish events, such as a sensor reading
 or that an action has occurred. Listeners can subscribe to events based on their
 type, source, etc. Listeners can then perform rules or send out subsequent
 events or commands.
+
+This is still very much a work in progress.
+
+Prerequesites
+-----------
+
+The Flask framework ("pip install flask")
+
+Usage
+-----
+
+There are two sample scripts:
+
+main.py - Starts the mesage bus, sends a sample message and then shuts down
+
+web_main.py - Starts up the message bus and a flask server. Provides a web
+interface for posting new Events and logs them to a file.
