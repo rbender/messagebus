@@ -17,6 +17,9 @@ class PatternMessageFilter(MessageFilter):
     def match(self, message):
         return self._type_regex.match(message.type) and self._source_regex.match(message.source)
 
+    def __call__(self, *args, **kwargs):
+        return self.match(args[0])
+
 class AllMessageFilter(MessageFilter):
     """
     MessageFilter that lets all messages through

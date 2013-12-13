@@ -1,8 +1,7 @@
 from flask import Flask
 from flask import render_template, request
 
-from messagebus import Message, MessageBus, AllMessageFilter
-from messagebus.listeners import MessageFileLogger
+from messagebus import Message, MessageBus
 
 import json
 
@@ -11,10 +10,8 @@ app.debug = True
 
 messagebus = MessageBus()
 
-message_file_logger = MessageFileLogger("messages.log")
-message_filter = AllMessageFilter()
-
-messagebus.subscribe(message_file_logger, message_filter)
+#Initialize this outside of this module
+message_store = None
 
 @app.route("/")
 def index():
@@ -37,5 +34,10 @@ def post_message():
     message = Message(category=category, source=source, type=type, target=target, data=data)
     messagebus.send_message(message)
 
-    return "Message Posted"
+    return "Posted Message {}".format(message.id)
 
+@app.route("/message/<int:id>", methods=['GET'])
+def get_message(id):
+
+    message = message_store.load_message(id)
+    return message.to_json()
