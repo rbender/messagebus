@@ -1,5 +1,4 @@
-import logging
-import re
+import util.pattern_matcher as pattern_matcher
 
 class MessageFilter:
 
@@ -11,8 +10,8 @@ class PatternMessageFilter(MessageFilter):
     def __init__(self, type, source):
         self.type = type
         self.source = source
-        self._type_regex = expand_regex(type)
-        self._source_regex = expand_regex(source)
+        self._type_regex = pattern_matcher.expand_regex(type)
+        self._source_regex = pattern_matcher.expand_regex(source)
 
     def match(self, message):
         return self._type_regex.match(message.type) and self._source_regex.match(message.source)
@@ -27,13 +26,3 @@ class AllMessageFilter(MessageFilter):
 
     def match(self, message):
         return True
-
-def expand_regex(pattern):
-
-    regex = pattern
-    regex = regex.replace(".", "\\.")
-    regex = regex.replace("*", "(.*?)")
-
-    logging.debug("Expand {pattern} to {regex}".format(pattern=pattern, regex=regex))
-
-    return re.compile(regex)

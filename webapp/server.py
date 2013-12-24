@@ -1,17 +1,17 @@
 from flask import Flask
-from flask import render_template, request
+from flask import render_template, request, Response
 
-from messagebus import Message, MessageBus
+from messagebus import Message
 
 import json
 
 app = Flask(__name__)
 app.debug = True
 
-messagebus = MessageBus()
-
-#Initialize this outside of this module
+#Initialize these outside of this module
+messagebus = None
 message_store = None
+devices = None
 
 @app.route("/")
 def index():
@@ -41,3 +41,19 @@ def get_message(id):
 
     message = message_store.load_message(id)
     return message.to_json()
+
+@app.route("/devices/", methods=['GET'])
+def list_devices():
+
+    device_ids = devices.list_devices()
+
+    return render_template("devices.html", devices=device_ids)
+
+@app.route("/devices/<id>", methods=['GET'])
+def get_device(id):
+
+    device = devices.get_device(id)
+    return Response(response=json.dumps(device, indent=4),
+                    status=200,
+                    mimetype="application/json")
+
