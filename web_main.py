@@ -3,7 +3,6 @@ import logging
 from webapp import server
 
 from messagebus import MessageBus
-
 from messagebus.services.store import MemoryMessageStore
 from messagebus.services import DeviceMetadataService
 from messagebus.configuration.init_script_loader import load_init_scripts
@@ -32,4 +31,5 @@ context["message_store"] = message_store
 
 load_init_scripts("config/init_scripts", context)
 
+# Start flash web application
 server.app.run()

@@ -36,11 +36,13 @@ def post_message():
 
     return "Posted Message {}".format(message.id)
 
-@app.route("/message/<int:id>", methods=['GET'])
+@app.route("/messages/<int:id>", methods=['GET'])
 def get_message(id):
 
     message = message_store.load_message(id)
-    return message.to_json()
+    return Response(response=message.to_json(indent=4),
+                    status=200,
+                    mimetype="application/json")
 
 @app.route("/devices/", methods=['GET'])
 def list_devices():

@@ -16,6 +16,12 @@ or that an action has occurred. Listeners can subscribe to events based on their
 type, source, etc. Listeners can then perform rules or send out subsequent
 events or commands.
 
+There are also several supplimentary services:
+
+- Message Store: Store and retrieve messages
+- Device Metadata Service: Store arbitrary information about devices. Useful for
+routing and configuration.
+
 This is still very much a work in progress.
 
 Prerequesites

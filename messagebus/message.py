@@ -28,6 +28,6 @@ class Message:
         builder.append("data", self.data)
         return builder.to_string()
 
-    def to_json(self):
-        return json.dumps(self.__dict__)
+    def to_json(self, **kwargs):
+        return json.dumps(self.__dict__, **kwargs)
 
