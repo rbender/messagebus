@@ -1,6 +1,6 @@
 import unittest
 
-from messagebus.store import MemoryMessageStore
+from messagebus.services.store import MemoryMessageStore
 from messagebus import Event
 from messagebus.messagefilter import PatternMessageFilter
 
