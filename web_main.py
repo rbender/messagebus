@@ -2,32 +2,34 @@ import logging
 
 from webapp import server
 
-from messagebus import MessageBus, AllMessageFilter, PatternMessageFilter
-from messagebus.listeners import MessageFileLogger, MessageStoreListener, XivelyListener
+from messagebus import MessageBus
+
 from messagebus.store import MemoryMessageStore
 from messagebus.services import DeviceMetadataService
+from messagebus.configuration.init_script_loader import load_init_scripts
 
 logging.basicConfig(level=logging.DEBUG)
 
-message_file_logger = MessageFileLogger("messages.log")
-all_message_filter = AllMessageFilter()
-
+# Initialize the message store
 message_store = MemoryMessageStore()
-message_store_listener = MessageStoreListener(message_store)
 server.message_store = message_store
 
+# Load and populate DeviceMetadataService from the config/devices
+# directory. In the future, this path should be configurable
 devices = DeviceMetadataService()
 devices.load_from_path("config/devices")
 server.devices = devices
 
-#xively_listener = XivelyListener(devices)
-#xively_filter = PatternMessageFilter("reading", "*")
-
+# Initialize the message bus
 message_bus = MessageBus()
 server.messagebus = message_bus
 
-server.messagebus.subscribe(message_file_logger, all_message_filter)
-server.messagebus.subscribe(message_store_listener, all_message_filter)
-#server.messagebus.subscribe(xively_listener, xively_filter)
+# Create context object and call init scripts
+context = {}
+context["messagebus"] = message_bus
+context["devices"] = devices
+context["message_store"] = message_store
+
+load_init_scripts("config/init_scripts", context)
 
 server.app.run()
