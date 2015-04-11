@@ -3,7 +3,10 @@ from flask import render_template, request, Response
 
 from messagebus import Message
 
+from messagebus.configuration.init_script_loader import shutdown_scripts
+
 import json
+import time
 
 app = Flask(__name__)
 app.debug = True
@@ -59,3 +62,15 @@ def get_device(id):
                     status=200,
                     mimetype="application/json")
 
+@app.route('/shutdown', methods=['POST','GET'])
+def shutdown():
+    shutdown_server()
+    return 'Server shutting down...'
+
+def shutdown_server():
+    shutdown_scripts()
+    time.sleep(1)
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
