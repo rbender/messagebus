@@ -1,5 +1,6 @@
 import logging
 import threading
+import uuid
 
 from messagesubscription import MessageSubscription
 from util import date_time_utils
@@ -24,6 +25,7 @@ class MessageBus:
     def send_message(self, message):
         message.id = self.__generate_id()
         self.__notify_subscribers(message)
+        return message.id
 
     def __notify_subscribers(self, message):
         self.logger.debug("Send message: {}".format(message))
@@ -41,7 +43,5 @@ class MessageBus:
         thread.start()
 
     def __generate_id(self):
-        new_id = self.counter
-        self.counter += 1
-        return new_id
+        return str(uuid.uuid1())
 

@@ -2,6 +2,8 @@ from flask import Flask
 from flask import render_template, request, Response
 
 from messagebus import Message
+from messagebus.util.simple_sensor_parser import SimpleSensorParser
+from messagebus.util import date_time_utils
 
 from messagebus.configuration.init_script_loader import shutdown_scripts
 
@@ -27,17 +29,29 @@ def message_form():
 @app.route("/post_message", methods=['POST'])
 def post_message():
 
-    #TODO Validate these fields
-    category = request.form['category']
-    source = request.form['source']
-    type = request.form['type']
-    target = request.form['target']
-    data = json.loads(request.form['data'])
+    if request.content_type == "application/x-www-form-urlencoded":
+        message = build_message_from_form_data(request.form)
 
-    message = Message(category=category, source=source, type=type, target=target, data=data)
+    elif request.content_type == "application/json":
+        message = build_message_from_json(request.get_json())
+
     messagebus.send_message(message)
 
     return "Posted Message {}".format(message.id)
+
+@app.route("/post_simple_sensors", methods=['POST'])
+def post_simple_sensors():
+
+    sensors_json = request.get_json()
+    parser = SimpleSensorParser()
+    events = parser.convert_to_events(sensors_json)
+
+    event_ids = []
+    for event in events:
+        event_id = messagebus.send_message(event)
+        event_ids.append(event_id)
+
+    return "Posted Messages: " + str(event_ids)
 
 @app.route("/messages/<int:id>", methods=['GET'])
 def get_message(id):
@@ -66,6 +80,40 @@ def get_device(id):
 def shutdown():
     shutdown_server()
     return 'Server shutting down...'
+
+def build_message_from_form_data(form):
+
+    now = date_time_utils.timestamp()
+
+    #Required fields
+    category = form['category']
+    source = form['source']
+    type = form['type']
+
+    #Optional fields
+    target = form.get('target')
+    timestamp = form.get('timestamp', now)
+
+    data = json.loads(form.get('data', default="{}"))
+
+    return Message(category=category, source=source, type=type, target=target, data=data, timestamp=timestamp, received_timestamp=now)
+
+def build_message_from_json(message_json):
+
+    now = date_time_utils.timestamp()
+
+    #Required fields
+    category = message_json['category']
+    source = message_json['source']
+    type = message_json['type']
+
+    #Optional fields
+    target = message_json.get('target')
+    timestamp = message_json.get('timestamp', now)
+
+    data = message_json.get('data', {})
+
+    return Message(category=category, source=source, type=type, target=target, data=data, timestamp=timestamp, received_timestamp=now)
 
 def shutdown_server():
     shutdown_scripts()
