@@ -1,1 +1,1 @@
-from device_metadata import DeviceMetadataService
+from device_registry import DeviceRegistry

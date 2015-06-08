@@ -6,7 +6,7 @@ from webapp import server
 
 from messagebus import MessageBus
 from messagebus.services.store import MemoryMessageStore
-from messagebus.services import DeviceMetadataService
+from messagebus.services import DeviceRegistry
 from messagebus.configuration.init_script_loader import load_init_scripts, shutdown_scripts
 
 logging.basicConfig(level=logging.DEBUG)
@@ -17,7 +17,7 @@ server.message_store = message_store
 
 # Load and populate DeviceMetadataService from the config/devices
 # directory. In the future, this path should be configurable
-devices = DeviceMetadataService()
+devices = DeviceRegistry()
 devices.load_from_path("config/devices")
 server.devices = devices
 
@@ -28,7 +28,7 @@ server.messagebus = message_bus
 # Create context object and call init scripts
 context = {}
 context["messagebus"] = message_bus
-context["devices"] = devices
+context["device_registry"] = devices
 context["message_store"] = message_store
 
 load_init_scripts("config/init_scripts", context)

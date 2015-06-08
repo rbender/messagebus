@@ -1,4 +1,4 @@
-from messagebus.services import DeviceMetadataService
+from messagebus.services import DeviceRegistry
 
 import logging
 import unittest
@@ -9,7 +9,7 @@ class TestEvent(unittest.TestCase):
 
         logging.basicConfig(level=logging.DEBUG)
 
-        self.devices = DeviceMetadataService()
+        self.devices = DeviceRegistry()
 
     def test_load__from_path(self):
         self.devices.load_from_path("test_config/devices")
