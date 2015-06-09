@@ -28,7 +28,6 @@ Prerequesites
 -----------
 
 - The Flask framework ("pip install flask")
-- The Python Xively client (optional)
 
 Usage
 -----
