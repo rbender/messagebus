@@ -1,7 +1,20 @@
 from unittest import TestCase
 
 from messagebus import Message, Command
-from messagebus import PatternMessageFilter
+from messagebus.messagefilter import PatternMessageFilter, AllMatcher, SimplePatternMatcher
+
+class TestPatternMatcher(TestCase):
+
+    def test_all_matcher(self):
+
+        matcher = AllMatcher()
+        self.assertTrue(matcher.match("foo"))
+
+    def test_simple_pattern_matcher(self):
+
+        matcher = SimplePatternMatcher("foo.*")
+        self.assertTrue(matcher.match("foo.bar"))
+        self.assertFalse(matcher.match("fo.bar"))
 
 
 class TestPatternMessageFilter(TestCase):

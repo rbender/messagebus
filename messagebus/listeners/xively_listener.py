@@ -1,5 +1,5 @@
 from messagebus import MessageListener
-import messagebus.util.pattern_matcher as pattern_matcher
+import messagebus.util.pattern_matching as pattern_matcher
 import xively
 
 class XivelyListener(MessageListener):
