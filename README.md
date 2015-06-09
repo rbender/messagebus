@@ -19,7 +19,7 @@ events or commands.
 There are also several supplimentary services:
 
 - Message Store: Store and retrieve messages
-- Device Metadata Service: Store arbitrary information about devices. Useful for
+- Device Registry: Store arbitrary information about devices. Useful for
 routing and configuration.
 
 This is still very much a work in progress.
@@ -31,10 +31,6 @@ Prerequesites
 
 Usage
 -----
-
-There are two sample scripts:
-
-main.py - Starts the mesage bus, sends a sample message and then shuts down
 
 web_main.py - Starts up the message bus and a flask server. Provides a web
 interface for posting new Events and logs them to a file.
