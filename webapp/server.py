@@ -31,13 +31,19 @@ def post_message():
 
     if request.content_type == "application/x-www-form-urlencoded":
         message = build_message_from_form_data(request.form)
+        messagebus.send_message(message)
+        return "Posted Message {}".format(message.id)
 
     elif request.content_type == "application/json":
         message = build_message_from_json(request.get_json())
+        messagebus.send_message(message)
 
-    messagebus.send_message(message)
+        response_data = {"message_id" : message.id}
+        response_json = json.dumps(response_data)
 
-    return "Posted Message {}".format(message.id)
+        return Response(response=response_json, status=200, mimetype="application/json")
+
+    return Response(response="Unsupported Mime Type", status=400)
 
 @app.route("/post_simple_sensors", methods=['POST'])
 def post_simple_sensors():
