@@ -25,6 +25,6 @@ class PhantHandler(MessageHandler):
 
 if __name__ == "__main__":
 
-    phant = PhantHandler("https://data.sparkfun.com/input/o840W6LndVFxmZALVRKb", "yzegyJPw2GCemYWpPz25", "temperature")
+    phant = PhantHandler("https://data.sparkfun.com/input/PUBLIC-KEY", "PRIVATE-KEY-HERE", "temperature")
 
     phant.send_value(78)
