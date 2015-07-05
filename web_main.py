@@ -42,4 +42,4 @@ context["message_store"] = message_store
 load_init_scripts(args.config + "/init_scripts", context)
 
 # Start flash web application
-server.app.run(port=args.port)
+server.app.run(port=args.port, use_reloader=False)
