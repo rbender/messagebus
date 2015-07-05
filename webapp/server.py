@@ -43,7 +43,8 @@ def post_message():
 
         return Response(response=response_json, status=200, mimetype="application/json")
 
-    return Response(response="Unsupported Mime Type", status=400)
+    else:
+        return Response(response="Unsupported Media Type", status=415)
 
 @app.route("/post_simple_sensors", methods=['POST'])
 def post_simple_sensors():
