@@ -1,8 +1,8 @@
-from messagebus import MessageListener
+from messagebus import MessageHandler
 
 import requests
 
-class PhantListener(MessageListener):
+class PhantHandler(MessageHandler):
 
     def __init__(self, url, private_key, param_name, message_field = "value"):
         self.url = url
@@ -25,6 +25,6 @@ class PhantListener(MessageListener):
 
 if __name__ == "__main__":
 
-    phant = PhantListener("https://data.sparkfun.com/input/o840W6LndVFxmZALVRKb", "yzegyJPw2GCemYWpPz25", "temperature")
+    phant = PhantHandler("https://data.sparkfun.com/input/o840W6LndVFxmZALVRKb", "yzegyJPw2GCemYWpPz25", "temperature")
 
     phant.send_value(78)

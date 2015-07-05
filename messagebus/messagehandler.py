@@ -1,13 +1,13 @@
 
 
-class MessageListener:
+class MessageHandler:
 
     def handle(self, message):
         pass
 
-class FunctionMessageListener(MessageListener):
+class FunctionMessageHandler(MessageHandler):
     """
-    Simple MessageListener that wraps a function
+    Simple MessageHandler that wraps a function
     """
 
     def __init__(self, function):

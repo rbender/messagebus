@@ -2,7 +2,7 @@ import logging
 
 from messagebus import Message
 from messagebus import PatternMessageFilter
-from messagebus import FunctionMessageListener
+from messagebus import FunctionMessageHandler
 from messagebus import MessageBus
 
 
@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     bus = MessageBus()
 
-    listener = FunctionMessageListener(handle)
+    listener = FunctionMessageHandler(handle)
 
     bus.subscribe(listener, PatternMessageFilter("foo", "bar"))
 

@@ -1,9 +1,9 @@
 """
 MessageListener implementation that saves messages to a MessageStore.
 """
-from messagebus import MessageListener
+from messagebus import MessageHandler
 
-class MessageStoreListener(MessageListener):
+class MessageStoreHandler(MessageHandler):
 
     def __init__(self, message_store):
         self.message_store = message_store

@@ -4,9 +4,9 @@ serialized to a JSON string and written on a single line.
 """
 import logging
 
-from messagebus import MessageListener
+from messagebus import MessageHandler
 
-class MessageFileLogger(MessageListener):
+class MessageFileLogger(MessageHandler):
 
     def __init__(self, filename):
 

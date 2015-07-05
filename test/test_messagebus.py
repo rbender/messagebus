@@ -5,7 +5,7 @@ from messagebus import Message
 from messagebus import PatternMessageFilter
 from messagebus import MessageBus
 
-from mock import MockMessageListener
+from mock import MockMessageHandler
 from mock import MockMessageFilter
 
 class TestMessageBus(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestMessageBus(unittest.TestCase):
 
     def test_send_message_calls_subscriber_when_filter_matches(self):
 
-        listener = MockMessageListener()
+        listener = MockMessageHandler()
         message_filter = MockMessageFilter(True)
         self.bus.subscribe(listener, message_filter)
 
@@ -31,7 +31,7 @@ class TestMessageBus(unittest.TestCase):
 
     def test_send_message_does_not_call_subscriber_when_filter_does_not_match(self):
 
-        listener = MockMessageListener()
+        listener = MockMessageHandler()
         message_filter = MockMessageFilter(False)
         self.bus.subscribe(listener, message_filter)
 

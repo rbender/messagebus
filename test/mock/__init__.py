@@ -1,2 +1,2 @@
-from mock_message_listener import MockMessageListener
+from mock_message_listener import MockMessageHandler
 from mock_message_filter import MockMessageFilter

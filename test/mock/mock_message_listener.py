@@ -1,6 +1,6 @@
-from messagebus import MessageListener
+from messagebus import MessageHandler
 
-class MockMessageListener(MessageListener):
+class MockMessageHandler(MessageHandler):
 
     def __init__(self):
         self.message = None

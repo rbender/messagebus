@@ -1,9 +1,9 @@
 """
 Listener that saves device deregistration to the device registry.
 """
-from messagebus import MessageListener
+from messagebus import MessageHandler
 
-class DeviceRegistrationListener(MessageListener):
+class DeviceRegistrationHandler(MessageHandler):
 
     def __init__(self, device_registry):
         self.device_registry = device_registry
@@ -17,7 +17,7 @@ class DeviceRegistrationListener(MessageListener):
 
         self.device_registry.add_device(device_id, device_info)
 
-class DeviceDeregistrationListener(MessageListener):
+class DeviceDeregistrationHandler(MessageHandler):
 
     def __init__(self, device_registry):
         self.device_registry = device_registry

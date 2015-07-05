@@ -1,3 +1,3 @@
 from message_logger import MessageFileLogger
-from message_store_listener import MessageStoreListener
+from message_store_handler import MessageStoreHandler
 #from xively_listener import XivelyListener
