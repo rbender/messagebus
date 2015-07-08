@@ -2,6 +2,11 @@ from messagebus import MessageHandler
 
 import requests
 
+"""
+Handler for sending data to the Phant/data.sparkfun.com service. Takes in the stream input URL,
+private API key and name of the stream parameter to submit.
+"""
+
 class PhantHandler(MessageHandler):
 
     def __init__(self, url, private_key, param_name, message_field = "value"):

@@ -2,6 +2,11 @@ from messagebus import MessageHandler
 
 import requests
 
+"""
+Handler for sending data to the ThingSpeak service. Takes in the stream input URL,
+private API key and name of the stream parameter to submit.
+"""
+
 class ThingSpeakHandler(MessageHandler):
 
     def __init__(self, url, api_key, param_name, message_field = "value"):
