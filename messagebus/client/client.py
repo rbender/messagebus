@@ -30,6 +30,11 @@ class MessageBusClient:
         data = response.json()
         return data["message_id"]
 
+    def send_event(self, device_id, event_type, **data):
+
+        message = Event(source=device_id, type=event_type, data=data, timestamp=date_time_utils.timestamp())
+        self.send_message(message)
+
 if __name__ == "__main__":
 
     logging.basicConfig(level=logging.DEBUG)

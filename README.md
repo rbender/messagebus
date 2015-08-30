@@ -27,7 +27,12 @@ This is still very much a work in progress.
 Prerequesites
 -----------
 
-- The Flask framework ("pip install flask")
+Run "pip install -r requirements.txt"
+
+Optional packages:
+
+- python-nest (For Nest thermostat integration)
+- Adafruit_IO (For Adafruit IO integration)
 
 Usage
 -----

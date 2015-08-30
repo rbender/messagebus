@@ -8,7 +8,7 @@ from messagebus.util.simple_sensor_parser import SimpleSensorParser
 
 DEFAULT_PORT = "/dev/tty.usbmodem1411"
 DEFAULT_BAUD = 9600
-DEFAULT_URL = "http://127.0.0.1:8000/post_message"
+DEFAULT_URL = "http://127.0.0.1:8007/post_message"
 
 class SimpleSensorPublisherProcess():
 
