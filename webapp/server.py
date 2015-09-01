@@ -7,6 +7,8 @@ from messagebus.util import date_time_utils
 
 from messagebus.configuration.init_script_loader import shutdown_scripts
 
+import logging
+
 import json
 import time
 
@@ -49,7 +51,8 @@ def post_message():
 @app.route("/post_simple_sensors", methods=['POST'])
 def post_simple_sensors():
 
-    sensors_json = request.get_json()
+    sensors_json = request.get_json(force=True)
+    logging.debug(sensors_json)
     parser = SimpleSensorParser()
     events = parser.convert_to_events(sensors_json)
 
