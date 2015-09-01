@@ -8,12 +8,14 @@ from messagebus.services import DeviceRegistry
 from messagebus.configuration.init_script_loader import load_init_scripts, shutdown_scripts
 
 DEFAULT_PORT = 8007
+DEFAULT_HOST = "127.0.0.1"
 CONFIG_ROOT = "config"
 
 logging.basicConfig(level=logging.DEBUG)
 
 parser = argparse.ArgumentParser(description='Read sensor readings and pass them to the messagebus.')
 parser.add_argument('-p', '--port', action="store", default=DEFAULT_PORT, type=int, help='HTTP port to run on')
+parser.add_argument('--host', action="store", default=DEFAULT_HOST, help='Host/IP to run on')
 parser.add_argument('-c', '--config', action="store", default=CONFIG_ROOT, help='Path to configuration')
 
 args = parser.parse_args()
@@ -42,4 +44,4 @@ context["message_store"] = message_store
 load_init_scripts(args.config + "/init_scripts", context)
 
 # Start flash web application
-server.app.run(port=args.port, use_reloader=False)
+server.app.run(port=args.port, host=args.host, use_reloader=False)
