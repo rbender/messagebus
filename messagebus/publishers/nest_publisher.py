@@ -38,12 +38,16 @@ class NestPublisher():
         thermostat = self.get_device()
         temperature_c = thermostat.temperature
         temperature_f = nest.utils.c_to_f(temperature_c)
+        target_temperature_c = thermostat.target
+        target_temperature_f = nest.utils.c_to_f(target_temperature_c)
         humidity = thermostat.humidity
 
         logging.debug("Temperature: %s", temperature_f)
+        logging.debug("Target Temperature: %s", target_temperature_f)
         logging.debug("Humidity: %s", humidity)
 
         self.messagebus_client.send_event(self.device_id, "sensor.reading.temperature", value=temperature_f, units="f")
+        self.messagebus_client.send_event(self.device_id, "sensor.reading.target_temperature", value=target_temperature_f, units="f")
         self.messagebus_client.send_event(self.device_id, "sensor.reading.humidity", value=humidity)
 
     def start(self):
@@ -51,8 +55,6 @@ class NestPublisher():
         while True:
             self.poll_device()
             time.sleep(self.interval)
-
-
 
 if __name__ == "__main__":
 
