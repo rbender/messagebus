@@ -11,7 +11,7 @@ DEFAULT_PORT = 8007
 DEFAULT_HOST = "127.0.0.1"
 CONFIG_ROOT = "config"
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG, format='%(levelname)-5s %(asctime)s %(filename)s:%(lineno)d: %(message)s')
 
 parser = argparse.ArgumentParser(description='Read sensor readings and pass them to the messagebus.')
 parser.add_argument('-p', '--port', action="store", default=DEFAULT_PORT, type=int, help='HTTP port to run on')

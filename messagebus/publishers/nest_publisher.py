@@ -18,6 +18,7 @@ class NestPublisher():
         self.device_id = device_id
         self.messagebus_client = MessageBusClient(bus_url)
         self.interval = interval
+        self.logger = logging.getLogger("NestPublisher")
 
     def dump_device_data(self):
 
@@ -31,11 +32,19 @@ class NestPublisher():
             if device._serial == self.serial:
                 return device
 
-        raise Exception("Cannot find thermostat " + self.name)
+        return None
 
     def poll_device(self):
 
-        thermostat = self.get_device()
+        try:
+            thermostat = self.get_device()
+        except Exception as ex:
+            self.logger.warn("Error getting thermostat: %s", ex)
+            return
+
+        if thermostat is None:
+            raise Exception("Cannot find thermostat " + self.name)
+
         temperature_c = thermostat.temperature
         temperature_f = nest.utils.c_to_f(temperature_c)
         target_temperature_c = thermostat.target
@@ -58,14 +67,14 @@ class NestPublisher():
 
 if __name__ == "__main__":
 
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG, format='%(levelname)-5s %(asctime)s %(filename)s:%(lineno)d: %(message)s')
 
     parser = argparse.ArgumentParser(description='Send Nest thermostat data to the messagebus.')
     parser.add_argument('-u', '--user', required=True, action="store", help='Nest username')
     parser.add_argument('-p', '--password', required=True, action="store", help='Nest password')
     parser.add_argument('-s', '--serial', required=True, action="store", help='Nest Serial Number')
     parser.add_argument('-d', '--device_id', required=True, action="store", help='Messagebus device id')
-    parser.add_argument('-i', '--enterval', action="store", help="Polling interval (seconds)")
+    parser.add_argument('-i', '--interval', action="store", help="Polling interval (seconds)")
     parser.add_argument('--url', action="store", default=DEFAULT_URL, help='Messagebus URL')
 
     args = parser.parse_args()

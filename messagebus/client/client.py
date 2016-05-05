@@ -1,7 +1,11 @@
 import requests
+from requests.packages.urllib3.util import Retry
+from requests.adapters import HTTPAdapter
+
 import logging
 import argparse
 import json
+import time
 
 from messagebus import Event
 from messagebus.util import date_time_utils
@@ -11,8 +15,10 @@ DEFAULT_URL = "http://127.0.0.1:8007/post_message"
 
 class MessageBusClient:
 
-    def __init__(self, url):
+    def __init__(self, url, max_retries=5, backoff_factor=1):
         self.url = url
+        self.max_retries = max_retries
+        self.backoff_factor = backoff_factor
 
     def send_message(self, message):
 
@@ -21,7 +27,15 @@ class MessageBusClient:
         logging.debug("Send message: %s", message_json)
 
         headers = {'Content-type': 'application/json'}
-        response = requests.post(self.url, data=message_json, headers=headers)
+
+        session = requests.Session()
+
+        if self.max_retries > 0:
+            retry = Retry(total=self.max_retries, backoff_factor=self.backoff_factor)
+            adapter = HTTPAdapter(max_retries=retry)
+            session.mount('http://', adapter)
+
+        response = session.post(self.url, data=message_json, headers=headers)
 
         logging.debug("Response status code %s", response.status_code)
         if response.status_code > 200:
@@ -44,17 +58,28 @@ if __name__ == "__main__":
     parser.add_argument("-t", "--type", action="store", required=True, help="Message type")
     parser.add_argument("-s", "--source", action="store", required=True, help="Message source")
     parser.add_argument("-d", "--data", action="store", default="{}", help="Message Data (JSON)")
+    parser.add_argument("-r", "--retries", action="store", default=5, type=int, help="Number of Retries")
+
 
     args = parser.parse_args()
     logging.debug(args)
 
-    client = MessageBusClient(args.url)
+    client = MessageBusClient(args.url, max_retries=args.retries)
 
     payload = json.loads(args.data)
 
     event = Event(source=args.source, type=args.type, data=payload, timestamp=date_time_utils.timestamp())
 
-    id = client.send_message(event)
+    start_time = time.time()
 
-    logging.debug("Sent event {}".format(id))
+    try:
+        id = client.send_message(event)
+        logging.debug("Sent event {}".format(id))
+
+    finally:
+
+        duration = time.time() - start_time
+        logging.debug("Duration: %s seconds", duration)
+
+
 

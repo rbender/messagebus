@@ -27,7 +27,7 @@ class SimpleSensorPublisherProcess():
 
 if __name__ == "__main__":
 
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG, format='%(levelname)-5s %(asctime)s %(filename)s:%(lineno)d: %(message)s')
 
     parser = argparse.ArgumentParser(description='Read sensor readings and pass them to the messagebus.')
     parser.add_argument('-p', '--port', action="store", default=DEFAULT_PORT, help='Serial port')
