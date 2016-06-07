@@ -5,8 +5,6 @@ from messagebus import Message
 from messagebus.util.simple_sensor_parser import SimpleSensorParser
 from messagebus.util import date_time_utils
 
-from messagebus.configuration.init_script_loader import shutdown_scripts
-
 import logging
 
 import json
@@ -48,6 +46,17 @@ def post_message():
     else:
         return Response(response="Unsupported Media Type", status=415)
 
+@app.route("/heartbeat_form")
+def heartbeat_form():
+    return render_template("heartbeat_form.html")
+
+@app.route("/post_heartbeat", methods=['POST'])
+def post_heartbeat():
+
+    message = build_heartbeat_from_form_data(request.form)
+    messagebus.send_message(message)
+    return "Posted Message {}".format(message.id)
+
 @app.route("/post_simple_sensors", methods=['POST'])
 def post_simple_sensors():
 
@@ -62,29 +71,6 @@ def post_simple_sensors():
         event_ids.append(event_id)
 
     return "Posted Messages: " + str(event_ids)
-
-@app.route("/messages/<int:id>", methods=['GET'])
-def get_message(id):
-
-    message = message_store.load_message(id)
-    return Response(response=message.to_json(indent=4),
-                    status=200,
-                    mimetype="application/json")
-
-@app.route("/devices/", methods=['GET'])
-def list_devices():
-
-    device_ids = devices.list_devices()
-
-    return render_template("devices.html", devices=device_ids)
-
-@app.route("/devices/<id>", methods=['GET'])
-def get_device(id):
-
-    device = devices.get_device(id)
-    return Response(response=json.dumps(device, indent=4),
-                    status=200,
-                    mimetype="application/json")
 
 @app.route('/shutdown', methods=['POST','GET'])
 def shutdown():
@@ -108,6 +94,19 @@ def build_message_from_form_data(form):
 
     return Message(category=category, source=source, type=type, target=target, data=data, timestamp=timestamp, received_timestamp=now)
 
+def build_heartbeat_from_form_data(form):
+
+    now = date_time_utils.timestamp()
+
+    #Required fields
+    category = "event"
+    source = form['source']
+    type = "event.device.heartbeat"
+
+    data = {}
+
+    return Message(category=category, source=source, type=type, data=data, received_timestamp=now)
+
 def build_message_from_json(message_json):
 
     now = date_time_utils.timestamp()
@@ -126,8 +125,9 @@ def build_message_from_json(message_json):
     return Message(category=category, source=source, type=type, target=target, data=data, timestamp=timestamp, received_timestamp=now)
 
 def shutdown_server():
-    shutdown_scripts()
-    time.sleep(1)
+
+    messagebus.shutdown()
+
     func = request.environ.get('werkzeug.server.shutdown')
     if func is None:
         raise RuntimeError('Not running with the Werkzeug Server')
