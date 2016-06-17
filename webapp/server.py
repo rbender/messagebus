@@ -1,14 +1,12 @@
 from flask import Flask
 from flask import render_template, request, Response
 
-from messagebus import Message
 from messagebus.util.simple_sensor_parser import SimpleSensorParser
-from messagebus.util import date_time_utils
+import server_helper
 
 import logging
 
 import json
-import time
 
 app = Flask(__name__)
 app.debug = True
@@ -30,12 +28,12 @@ def message_form():
 def post_message():
 
     if request.content_type == "application/x-www-form-urlencoded":
-        message = build_message_from_form_data(request.form)
+        message = server_helper.build_message_from_form_data(request.form)
         messagebus.send_message(message)
         return "Posted Message {}".format(message.id)
 
     elif request.content_type == "application/json":
-        message = build_message_from_json(request.get_json())
+        message = server_helper.build_message_from_json(request.get_json())
         messagebus.send_message(message)
 
         response_data = {"message_id" : message.id}
@@ -53,7 +51,7 @@ def heartbeat_form():
 @app.route("/post_heartbeat", methods=['POST'])
 def post_heartbeat():
 
-    message = build_heartbeat_from_form_data(request.form)
+    message = server_helper.build_heartbeat_from_form_data(request.form)
     messagebus.send_message(message)
     return "Posted Message {}".format(message.id)
 
@@ -77,52 +75,6 @@ def shutdown():
     shutdown_server()
     return 'Server shutting down...'
 
-def build_message_from_form_data(form):
-
-    now = date_time_utils.timestamp()
-
-    #Required fields
-    category = form['category']
-    source = form['source']
-    type = form['type']
-
-    #Optional fields
-    target = form.get('target')
-    timestamp = form.get('timestamp', now)
-
-    data = json.loads(form.get('data', default="{}"))
-
-    return Message(category=category, source=source, type=type, target=target, data=data, timestamp=timestamp, received_timestamp=now)
-
-def build_heartbeat_from_form_data(form):
-
-    now = date_time_utils.timestamp()
-
-    #Required fields
-    category = "event"
-    source = form['source']
-    type = "event.device.heartbeat"
-
-    data = {}
-
-    return Message(category=category, source=source, type=type, data=data, received_timestamp=now)
-
-def build_message_from_json(message_json):
-
-    now = date_time_utils.timestamp()
-
-    #Required fields
-    category = message_json['category']
-    source = message_json['source']
-    type = message_json['type']
-
-    #Optional fields
-    target = message_json.get('target')
-    timestamp = message_json.get('timestamp', now)
-
-    data = message_json.get('data', {})
-
-    return Message(category=category, source=source, type=type, target=target, data=data, timestamp=timestamp, received_timestamp=now)
 
 def shutdown_server():
 

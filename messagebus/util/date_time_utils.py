@@ -5,6 +5,7 @@ Inspired by the Java JodaTime DateTimeUtils class
 """
 
 from time import time
+from datetime import datetime
 
 __use_fixed_timestamp = False
 __fixed_timestamp = -1
@@ -17,7 +18,12 @@ def timestamp():
     if __use_fixed_timestamp:
         return __fixed_timestamp
     else:
+        #TODO Make sure this is UTC
         return int(time() * 1000)
+
+def unix_timestamp_to_datetime(timestamp):
+
+    return datetime.utcfromtimestamp(timestamp / 1000)
 
 def set_fixed_timestamp(timestamp):
     """

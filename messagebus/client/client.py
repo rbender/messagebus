@@ -7,7 +7,7 @@ import argparse
 import json
 import time
 
-from messagebus import Event
+from messagebus import Message
 from messagebus.util import date_time_utils
 
 
@@ -44,9 +44,18 @@ class MessageBusClient:
         data = response.json()
         return data["message_id"]
 
-    def send_event(self, device_id, event_type, **data):
+    def send(self, **data):
 
-        message = Event(source=device_id, type=event_type, data=data, timestamp=date_time_utils.timestamp())
+        message = Message(**data)
+        self.send_message(message)
+
+    def send_reading(self, source, type, value, units=None):
+
+        data = {"value": value}
+        if units is not None:
+            data["units"] = units
+
+        message = Message(source=source, type=type, data=data)
         self.send_message(message)
 
 if __name__ == "__main__":
@@ -68,12 +77,12 @@ if __name__ == "__main__":
 
     payload = json.loads(args.data)
 
-    event = Event(source=args.source, type=args.type, data=payload, timestamp=date_time_utils.timestamp())
+    message = Message(source=args.source, type=args.type, data=payload, timestamp=date_time_utils.timestamp())
 
     start_time = time.time()
 
     try:
-        id = client.send_message(event)
+        id = client.send_message(message)
         logging.debug("Sent event {}".format(id))
 
     finally:

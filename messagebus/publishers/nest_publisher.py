@@ -5,6 +5,8 @@ import logging
 import argparse
 import time
 
+import messagebus.message_types as message_types
+
 from messagebus.client import MessageBusClient
 
 DEFAULT_URL = "http://127.0.0.1:8007/post_message"
@@ -55,9 +57,9 @@ class NestPublisher():
         logging.debug("Target Temperature: %s", target_temperature_f)
         logging.debug("Humidity: %s", humidity)
 
-        self.messagebus_client.send_event(self.device_id, "sensor.reading.temperature", value=temperature_f, units="f")
-        self.messagebus_client.send_event(self.device_id, "sensor.reading.target_temperature", value=target_temperature_f, units="f")
-        self.messagebus_client.send_event(self.device_id, "sensor.reading.humidity", value=humidity)
+        self.messagebus_client.send_reading(self.device_id, message_types.EVENT_TEMPERATURE, value=temperature_f, units="f")
+        self.messagebus_client.send_reading(self.device_id, message_types.EVENT_TARGET_TEMPERATURE, value=target_temperature_f, units="f")
+        self.messagebus_client.send_reading(self.device_id, message_types.EVENT_HUMIDITY, value=humidity)
 
     def start(self):
 

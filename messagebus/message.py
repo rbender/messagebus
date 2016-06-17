@@ -9,7 +9,6 @@ class Message:
     """
 
     def __init__(self, **kwargs):
-        self.category = kwargs.get("category")
         self.id = kwargs.get("id", None)
         self.type = kwargs.get("type")
         self.source = kwargs.get("source")
@@ -20,7 +19,6 @@ class Message:
 
     def __str__(self):
         builder = ToStringBuilder("Message")
-        builder.append("category", self.category)
         builder.append("id", self.id)
         builder.append("timestamp", self.timestamp)
         builder.append("received_timestamp", self.received_timestamp)

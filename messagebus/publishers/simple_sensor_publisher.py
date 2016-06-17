@@ -5,7 +5,7 @@ import threading
 import time
 import json
 
-from messagebus import Event
+from messagebus import Message
 from messagebus.util import SerialBuffer
 
 class SimpleSensorPublisher(threading.Thread):
@@ -51,7 +51,7 @@ class SimpleSensorPublisher(threading.Thread):
 
         source = "arduino." + name
         data = {"value" : value}
-        event = Event(source=source, type="reading", data=data)
+        event = Message(source=source, type="reading", data=data)
 
         if self.messagebus is not None:
             self.messagebus.send_message(event)

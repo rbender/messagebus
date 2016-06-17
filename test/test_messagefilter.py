@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from messagebus import Message, Command
+from messagebus import Message
 from messagebus.messagefilter import PatternMessageFilter, AllMatcher, SimplePatternMatcher
 
 class TestPatternMatcher(TestCase):
@@ -35,6 +35,6 @@ class TestPatternMessageFilter(TestCase):
 
     def test_match_target(self):
 
-        message = Command(type="foo", source="bar", target="baz")
+        message = Message(type="foo", source="bar", target="baz")
         filter = PatternMessageFilter(target="*")
         self.assertTrue(filter.match(message))
