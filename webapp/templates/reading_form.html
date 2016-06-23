@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post New Sensor Reading</title>
+</head>
+<body>
+
+<h1>New Reading</h1>
+
+<form method="POST" action="post_reading" id="reading_form">
+
+    <p>Source/Device Id: <input type="text" name="source" size="50"/></p>
+
+    <p>Reading Type: <input type="text" name="type" size="50"/></p>
+
+    <p>Value: <input type="text" name="value" size="50"/></p>
+
+    <p>Raw Value (Optional): <input type="text" name="raw" size="50"/></p>
+
+    <p>Units (Optional): <input type="text" name="units" size="50"/></p>
+
+    <input type="submit" value="Create Reading"/>
+
+</form>
+
+</body>
+</html>

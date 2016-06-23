@@ -15,9 +15,9 @@ INSERT_MESSAGE_SQL = ("INSERT INTO messages "
                       "%(message_type)s, %(message_json)s, %(message_timestamp)s, %(message_received)s)")
 
 INSERT_READING_SQL = ("INSERT INTO readings "
-                      "(message_uuid, device_id, sensor_id, reading_type, reading_value, raw_value, reading_timestamp) "
+                      "(message_uuid, device_id, sensor_id, reading_type, reading_value, raw_value, reading_units, reading_timestamp) "
                       "VALUES (%(message_uuid)s, %(device_id)s, %(sensor_id)s, "
-                      "%(reading_type)s, %(reading_value)s, %(raw_value)s, %(reading_timestamp)s)")
+                      "%(reading_type)s, %(reading_value)s, %(raw_value)s, %(reading_units)s, %(reading_timestamp)s)")
 
 class MySqlMessageStore(object):
 

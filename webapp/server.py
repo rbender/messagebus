@@ -55,6 +55,17 @@ def post_heartbeat():
     messagebus.send_message(message)
     return "Posted Message {}".format(message.id)
 
+@app.route("/reading_form")
+def reading_form():
+    return render_template("reading_form.html")
+
+@app.route("/post_reading", methods=['POST'])
+def post_reading():
+
+    message = server_helper.build_reading_from_form_data(request.form)
+    messagebus.send_message(message)
+    return "Posted Message {}".format(message.id)
+
 @app.route("/post_simple_sensors", methods=['POST'])
 def post_simple_sensors():
 
