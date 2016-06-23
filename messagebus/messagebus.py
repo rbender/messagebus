@@ -64,16 +64,18 @@ class MessageBus:
         now = date_time_utils.timestamp()
 
         #Required fields
+        id = message_json["id"]
         source = message_json['source']
         type = message_json['type']
 
         #Optional fields
         target = message_json.get('target')
         timestamp = message_json.get('timestamp', now)
+        received_timestamp = message_json.get('received_timestamp', now)
 
         data = message_json.get('data', {})
 
-        return Message(source=source, type=type, target=target, data=data, timestamp=timestamp, received_timestamp=now)
+        return Message(id=id, source=source, type=type, target=target, data=data, timestamp=timestamp, received_timestamp=received_timestamp)
 
     def connect(self):
         self.logger.info("Connect to MQTT Server %s:%s", self.mqtt_host, self.mqtt_port)
