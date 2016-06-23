@@ -2,6 +2,9 @@ CREATE DATABASE messagebus;
 
 USE DATABASE messagebus;
 
+CREATE USER 'messagebus'@'localhost' IDENTIFIED BY 'passwordhere';
+GRANT ALL ON messagebus.* TO 'messagebus'@'localhost';
+
 CREATE TABLE messages (
     message_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     message_uuid BINARY(16) NOT NULL,
@@ -20,6 +23,7 @@ CREATE TABLE readings (
     sensor_id VARCHAR(255) NOT NULL,
     reading_type VARCHAR(255) NOT NULL,
     reading_value FLOAT NOT NULL,
+    reading_units VARCHAR(100),
     raw_value FLOAT,
     reading_timestamp DATETIME NOT NULL
 ) DEFAULT CHARSET=utf8mb4 ENGINE=MyISAM;

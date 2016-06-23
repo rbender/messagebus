@@ -13,4 +13,6 @@ EVENT_DEVICE_MISSING = "event.system.device.missing"
 COMMAND_SHUTDOWN = "command.system.shutdown"
 COMMAND_PING = "command.device.ping"
 
+PATTERN_READING_ALL = EVENT_READING + ".*"
+
 
